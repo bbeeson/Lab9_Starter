@@ -87,7 +87,21 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "a81d952905024fdfb791585528da591e"
+    
+    });
+
+    class MissingInput extends Error{
+      constructor(message) {
+        super("Input it missing from:" + message);
+        this.name = this.constructor.name;
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,10 +109,96 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      
+      try{
+        
+        if(firstNum == null ){
+          throw new MissingInput("first number");
+        }
+        if( secondNum == null ){
+          throw new MissingInput("second number");
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+        
+      } catch(err) {
+        let error_Message = err;
+        console.error(error_Message);
+      }
+
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console Log: ");
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console Error: ");
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.count("Count: ");
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.warn("Warning: ");
+    });
+
+    let number = 5;
+
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(number == 10,{'number': number, 'errorMessage':`Expected 10, was ${number}`});
+    });
+
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(errorBtns[6]);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(errorBtns);
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.group();
+      console.log("Console.Group: ");
+    });
+
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+      console.log("Ended Console.Group: ");
+    });
+
+    errorBtns[10].addEventListener('click', () => {
+      console.table([1,4,6,10],[8,2,3,7]);
+    });
+
+    errorBtns[11].addEventListener('click', () => {
+      console.time();
+      console.log("Time Started");
+    });
+
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd();
+      console.log("Time Ended");
+    });
+
+    function call_trace(){
+      console.trace();
+    }
+
+    errorBtns[13].addEventListener('click', () => {
+      call_trace();
+    });
+
+
+    errorBtns[14].addEventListener('click', () => {
+      console.error(Not_Known);
+    });
 
     // Start your code here
     // You may move this JS to another file if you wish
